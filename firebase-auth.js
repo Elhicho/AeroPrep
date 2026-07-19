@@ -99,18 +99,37 @@ async function logConnection(user) {
   try {
     let loc = { ip: "Inconnue", city: "Inconnue", country_name: "Inconnu" };
     try {
-      const resp = await fetch('https://ipapi.co/json/');
-      if (resp.ok) loc = await resp.json();
-    } catch (apiErr) {
-      console.warn("Erreur géolocalisation", apiErr);
+      // API principale
+      const resp = await fetch('https://freeipapi.com/api/json/');
+      if (resp.ok) {
+        const data = await resp.json();
+        loc.ip = data.ipAddress || "Inconnue";
+        loc.city = data.cityName || "Inconnue";
+        loc.country_name = data.countryName || "Inconnu";
+      } else {
+        throw new Error("freeipapi failed");
+      }
+    } catch (err1) {
+      // Fallback
+      try {
+        const fallback = await fetch('https://ipinfo.io/json');
+        if (fallback.ok) {
+          const fData = await fallback.json();
+          loc.ip = fData.ip || "Inconnue";
+          loc.city = fData.city || "Inconnue";
+          loc.country_name = fData.country || "Inconnu";
+        }
+      } catch (err2) {
+        console.warn("Erreur géo finale", err2);
+      }
     }
 
     await addDoc(collection(db, "login_logs"), {
       email: user.email,
       timestamp: serverTimestamp(),
       userAgent: navigator.userAgent,
-      ip: loc.ip || "Inconnue",
-      location: (loc.city && loc.country_name) ? `${loc.city}, ${loc.country_name}` : "Inconnue"
+      ip: loc.ip,
+      location: (loc.city && loc.city !== "Inconnue") ? `${loc.city}, ${loc.country_name}` : "Inconnue"
     });
   } catch (e) {
     console.error("Erreur log", e);
