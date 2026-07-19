@@ -29,6 +29,9 @@
     .logout-btn:hover { background: rgba(255,123,131,.25); }
     .empty-state { text-align: center; padding: 40px; color: var(--muted); }
     .device-info { font-size: 0.75rem; color: var(--muted); display: block; margin-top: 4px; }
+    .charts-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 30px; }
+    .chart-card { background: linear-gradient(155deg,rgba(20,40,66,.95),rgba(11,25,43,.97)); border: 1px solid rgba(166,191,219,.34); border-radius: 20px; padding: 20px; display: flex; justify-content: center; align-items: center; min-height: 250px; }
+    @media (max-width: 768px) { .charts-grid { grid-template-columns: 1fr; } }
   </style>
 </head>
 <body>
@@ -55,6 +58,15 @@
         <button class="logout-btn" id="logoutBtn">Déconnexion</button>
       </div>
 
+      <div class="charts-grid" id="chartsContainer" hidden>
+        <div class="chart-card">
+          <canvas id="connectionsChart"></canvas>
+        </div>
+        <div class="chart-card">
+          <canvas id="browsersChart"></canvas>
+        </div>
+      </div>
+
       <div class="table-container">
         <h3>Historique des connexions <span id="logCount" class="badge" style="display:inline-block; margin-left: 10px;">0</span></h3>
         <table id="logsTable">
@@ -63,16 +75,18 @@
               <th>Date & Heure</th>
               <th>Utilisateur</th>
               <th>Appareil / Navigateur</th>
+              <th>Localisation</th>
             </tr>
           </thead>
           <tbody id="logsBody">
-            <tr><td colspan="3" class="empty-state">Chargement des données...</td></tr>
+            <tr><td colspan="4" class="empty-state">Chargement des données...</td></tr>
           </tbody>
         </table>
       </div>
     </div>
 
   </main>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script type="module" src="admin.js"></script>
 </body>
 </html>
