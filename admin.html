@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="description" content="Administration AeroPrep">
+  <meta name="theme-color" content="#07111f">
+  <meta name="color-scheme" content="dark light">
+  <meta name="robots" content="noindex,nofollow,noarchive">
+  <title>Administration — AeroPrep</title>
+  <link rel="stylesheet" href="auth.css">
+  <style>
+    /* Styles specifiques a l'administration */
+    .admin-panel { max-width: 900px; width: 100%; margin: 40px auto; padding: 0 20px; }
+    .table-container { 
+      background: linear-gradient(155deg,rgba(20,40,66,.95),rgba(11,25,43,.97));
+      border: 1px solid rgba(166,191,219,.34);
+      border-radius: 20px;
+      padding: 20px;
+      margin-top: 30px;
+      overflow-x: auto;
+    }
+    table { width: 100%; border-collapse: collapse; text-align: left; }
+    th { color: var(--accent); padding: 12px 15px; border-bottom: 1px solid var(--line); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; }
+    td { padding: 15px; border-bottom: 1px solid var(--line); font-size: 0.9rem; color: var(--soft); }
+    tr:last-child td { border-bottom: none; }
+    .header-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+    .logout-btn { background: rgba(255,123,131,.13); color: #ffd6d9; border: 1px solid rgba(255,123,131,.3); padding: 8px 16px; border-radius: 8px; cursor: pointer; font-size: 0.8rem; }
+    .logout-btn:hover { background: rgba(255,123,131,.25); }
+    .empty-state { text-align: center; padding: 40px; color: var(--muted); }
+    .device-info { font-size: 0.75rem; color: var(--muted); display: block; margin-top: 4px; }
+  </style>
+</head>
+<body>
+  <main class="admin-panel">
+    
+    <div id="loginView" class="card" style="margin: 10vh auto;">
+      <span class="badge" style="color:var(--accent);background:rgba(255,159,67,.13);border-color:rgba(255,159,67,.22)"><i>●</i> Accès Administrateur</span>
+      <h2>Administration</h2>
+      <div class="message" id="adminMessage" hidden></div>
+      <form id="adminLoginForm">
+        <div class="field"><label>E-mail admin</label><input type="email" id="adminEmail" required></div>
+        <div class="field"><label>Mot de passe</label><input type="password" id="adminPassword" required></div>
+        <button class="primary" type="submit" id="adminLoginBtn"><span>Connexion</span><span aria-hidden="true">→</span></button>
+      </form>
+      <div class="links" style="margin-top: 20px;"><a href="index.html">← Retour à l'application</a></div>
+    </div>
+
+    <div id="dashboardView" hidden>
+      <div class="header-bar">
+        <a class="brand" href="index.html">
+          <span class="brand-logo" aria-hidden="true"><b>A</b></span>
+          <span class="brand-copy"><strong>AeroPrep</strong><small>Tableau de bord</small></span>
+        </a>
+        <button class="logout-btn" id="logoutBtn">Déconnexion</button>
+      </div>
+
+      <div class="table-container">
+        <h3>Historique des connexions <span id="logCount" class="badge" style="display:inline-block; margin-left: 10px;">0</span></h3>
+        <table id="logsTable">
+          <thead>
+            <tr>
+              <th>Date & Heure</th>
+              <th>Utilisateur</th>
+              <th>Appareil / Navigateur</th>
+            </tr>
+          </thead>
+          <tbody id="logsBody">
+            <tr><td colspan="3" class="empty-state">Chargement des données...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </main>
+  <script type="module" src="admin.js"></script>
+</body>
+</html>
