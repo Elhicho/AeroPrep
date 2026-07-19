@@ -6,7 +6,8 @@ import {
   browserLocalPersistence, 
   browserSessionPersistence,
   sendPasswordResetEmail,
-  onAuthStateChanged
+  onAuthStateChanged,
+  signOut
 } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-auth.js";
 import { 
   getFirestore, 
@@ -194,3 +195,20 @@ onAuthStateChanged(auth, user => {
     openApp();
   }
 });
+
+// Intercepter le clic sur le bouton de déconnexion dans l'application
+document.addEventListener('click', async e => {
+  const logoutBtn = e.target.closest('#aeroprepLogout');
+  if (logoutBtn) {
+    e.preventDefault();
+    e.stopPropagation(); // Bloque l'ancien comportement du payload
+    try {
+      await signOut(auth);
+      localStorage.removeItem("aeroprep_auth_account_v1");
+      sessionStorage.removeItem("aeroprep_auth_session_v1");
+      location.reload();
+    } catch (err) {
+      console.error(err);
+    }
+  }
+}, true); // true = phase de capture pour s'exécuter AVANT l'ancien script
