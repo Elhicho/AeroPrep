@@ -94,13 +94,23 @@ async function openApp() {
   }
 }
 
-// Enregistrer la connexion
+// Enregistrer la connexion avec géolocalisation
 async function logConnection(user) {
   try {
+    let loc = { ip: "Inconnue", city: "Inconnue", country_name: "Inconnu" };
+    try {
+      const resp = await fetch('https://ipapi.co/json/');
+      if (resp.ok) loc = await resp.json();
+    } catch (apiErr) {
+      console.warn("Erreur géolocalisation", apiErr);
+    }
+
     await addDoc(collection(db, "login_logs"), {
       email: user.email,
       timestamp: serverTimestamp(),
-      userAgent: navigator.userAgent
+      userAgent: navigator.userAgent,
+      ip: loc.ip || "Inconnue",
+      location: (loc.city && loc.country_name) ? `${loc.city}, ${loc.country_name}` : "Inconnue"
     });
   } catch (e) {
     console.error("Erreur log", e);
