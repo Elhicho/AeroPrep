@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="description" content="Connexion personnelle à AeroPrep Ahmed.">
+  <meta name="theme-color" content="#07111f">
+  <meta name="color-scheme" content="dark light">
+  <meta name="robots" content="noindex,nofollow,noarchive">
+  <title>Connexion — AeroPrep Ahmed</title>
+  <link rel="stylesheet" href="auth.css">
+</head>
+<body>
+  <a class="skip" href="#authCard">Aller au formulaire d’identification</a>
+  <main class="layout">
+    <section class="intro" aria-labelledby="introTitle">
+      <a class="brand" href="./" aria-label="AeroPrep Ahmed — connexion">
+        <span class="brand-logo" aria-hidden="true"><span class="wing"></span><b>A</b><span class="wing"></span></span>
+        <span class="brand-copy"><strong>AeroPrep</strong><small>Ahmed El Hicho</small></span>
+      </a>
+      <div class="hero">
+        <p class="eyebrow">Espace personnel d’apprentissage</p>
+        <h1 id="introTitle">Maîtriser ton parcours.<br>Préparer ton avenir aéronautique.</h1>
+        <p>Révise tes projets, entraîne-toi aux entretiens, apprends les abréviations et consolide chaque jour les fondamentaux de l’aéronautique.</p>
+      </div>
+      <div class="features" aria-label="Fonctionnalités principales">
+        <article class="feature"><span>17</span><div><strong>Projets maîtrisés</strong><small>Pitchs, preuves et limites</small></div></article>
+        <article class="feature"><span>✈</span><div><strong>Parcours aéronautique</strong><small>9 parties avec tests</small></div></article>
+        <article class="feature"><span>Q</span><div><strong>Quiz quotidien</strong><small>Révision adaptative</small></div></article>
+      </div>
+      <div class="orbit" aria-hidden="true"><span></span><span></span><span></span></div>
+    </section>
+    <section class="panel" aria-label="Identification">
+      <div class="card" id="authCard">
+        <div id="authView">
+          <span class="badge"><i>●</i> Accès local</span>
+          <h2 id="formTitle">Connexion</h2>
+          <p class="subtitle" id="formSubtitle">Identifie-toi pour ouvrir ton espace AeroPrep.</p>
+          <div class="message" id="authMessage" role="status" aria-live="polite" hidden></div>
+          <form id="loginForm" novalidate>
+            <div class="field"><label for="loginEmail">Adresse e-mail</label><input id="loginEmail" type="email" inputmode="email" autocomplete="username" required placeholder="nom@exemple.com"></div>
+            <div class="field"><label for="loginPassword">Mot de passe</label><div class="password"><input id="loginPassword" type="password" autocomplete="current-password" required placeholder="Ton mot de passe"><button class="reveal" type="button" data-toggle="loginPassword" aria-label="Afficher le mot de passe">Afficher</button></div></div>
+            <label class="check"><input id="rememberMe" type="checkbox"><span>Rester connecté sur cet appareil pendant 30 jours</span></label>
+            <button class="primary" id="loginButton" type="submit"><span>Entrer dans AeroPrep</span><span aria-hidden="true">→</span></button>
+          </form>
+          <form id="registerForm" novalidate hidden>
+            <div class="field"><label for="registerName">Nom affiché</label><input id="registerName" type="text" autocomplete="name" minlength="2" maxlength="80" required placeholder="Ahmed El Hicho"></div>
+            <div class="field"><label for="registerEmail">Adresse e-mail</label><input id="registerEmail" type="email" inputmode="email" autocomplete="username" required placeholder="nom@exemple.com"></div>
+            <div class="field"><label for="registerPassword">Créer un mot de passe</label><div class="password"><input id="registerPassword" type="password" autocomplete="new-password" minlength="8" required placeholder="Au moins 8 caractères"><button class="reveal" type="button" data-toggle="registerPassword" aria-label="Afficher le mot de passe">Afficher</button></div><small class="hint">Au moins 8 caractères, avec une lettre et un chiffre.</small></div>
+            <div class="field"><label for="registerConfirm">Confirmer le mot de passe</label><div class="password"><input id="registerConfirm" type="password" autocomplete="new-password" minlength="8" required placeholder="Répète le mot de passe"><button class="reveal" type="button" data-toggle="registerConfirm" aria-label="Afficher le mot de passe">Afficher</button></div></div>
+            <label class="check"><input id="acceptLocal" type="checkbox" required><span>J’accepte que mon compte et ma progression soient enregistrés localement sur cet appareil.</span></label>
+            <button class="primary" id="registerButton" type="submit"><span>Créer mon accès</span><span aria-hidden="true">→</span></button>
+          </form>
+          <div class="footer"><p><b>◆</b> Le mot de passe n’est jamais enregistré en clair et aucune donnée d’identification n’est envoyée à un serveur.</p><button class="text-button" id="resetButton" type="button" hidden>Réinitialiser l’accès sur cet appareil</button></div>
+        </div>
+        <div class="loading" id="loadingView" hidden><div class="spinner" aria-hidden="true"></div><h2>Ouverture d’AeroPrep</h2><p class="subtitle">Chargement de ton espace personnel…</p></div>
+      </div>
+      <div class="links"><a href="../">← Retour au portfolio</a><span>Compte local · Données sur cet appareil</span></div>
+    </section>
+  </main>
+  <script src="auth.js"></script>
+</body>
+</html>
