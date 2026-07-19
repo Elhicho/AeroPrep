@@ -50,7 +50,10 @@ const busy = (b, on, t) => {
 const bad = (el, on) => on ? el.setAttribute('aria-invalid', 'true') : el.removeAttribute('aria-invalid');
 
 // Ouvrir l'application
+let appOpened = false;
 async function openApp() {
+  if (appOpened) return;
+  appOpened = true;
   $('authView').hidden = true;
   $('loadingView').hidden = false;
   try {
