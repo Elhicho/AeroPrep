@@ -64,6 +64,59 @@ $('logoutBtn').addEventListener('click', () => {
   signOut(auth);
 });
 
+let connectionsChartInstance = null;
+let browsersChartInstance = null;
+
+function renderCharts(datesData, browsersData) {
+  $('chartsContainer').hidden = false;
+  
+  // Inverser pour avoir l'ordre chronologique (les plus anciens d'abord sur le graphique)
+  const labels = Object.keys(datesData).reverse();
+  const dataPoints = Object.values(datesData).reverse();
+
+  const ctxConn = document.getElementById('connectionsChart').getContext('2d');
+  if(connectionsChartInstance) connectionsChartInstance.destroy();
+  connectionsChartInstance = new Chart(ctxConn, {
+    type: 'line',
+    data: {
+      labels: labels,
+      datasets: [{
+        label: 'Connexions par jour',
+        data: dataPoints,
+        borderColor: '#a6bfdb',
+        backgroundColor: 'rgba(166,191,219,0.2)',
+        tension: 0.3,
+        fill: true
+      }]
+    },
+    options: { responsive: true, plugins: { legend: { labels: { color: '#a6bfdb' } } }, scales: { x: { ticks: { color: '#a6bfdb' } }, y: { ticks: { color: '#a6bfdb', stepSize: 1 } } } }
+  });
+
+  const ctxBrows = document.getElementById('browsersChart').getContext('2d');
+  if(browsersChartInstance) browsersChartInstance.destroy();
+  browsersChartInstance = new Chart(ctxBrows, {
+    type: 'doughnut',
+    data: {
+      labels: Object.keys(browsersData),
+      datasets: [{
+        data: Object.values(browsersData),
+        backgroundColor: ['#ff9f43', '#ff7b83', '#a6bfdb', '#4a6583', '#142842'],
+        borderWidth: 0
+      }]
+    },
+    options: { responsive: true, plugins: { legend: { position: 'bottom', labels: { color: '#a6bfdb' } } } }
+  });
+}
+
+function getBrowserName(ua) {
+  if (!ua) return 'Inconnu';
+  if (ua.includes('Edg')) return 'Edge';
+  if (ua.includes('Chrome')) return 'Chrome';
+  if (ua.includes('Firefox')) return 'Firefox';
+  if (ua.includes('Safari')) return 'Safari';
+  return 'Autre';
+}
+
 async function loadLogs() {
   const tbody = $('logsBody');
   try {
@@ -73,26 +126,40 @@ async function loadLogs() {
     $('logCount').textContent = snapshot.size + (snapshot.size === 100 ? '+' : '');
     
     if (snapshot.empty) {
-      tbody.innerHTML = '<tr><td colspan="3" class="empty-state">Aucune connexion enregistrée.</td></tr>';
+      tbody.innerHTML = '<tr><td colspan="4" class="empty-state">Aucune connexion enregistrée.</td></tr>';
       return;
     }
     
     tbody.innerHTML = '';
+    const datesData = {};
+    const browsersData = {};
+    
     snapshot.forEach(doc => {
       const data = doc.data();
-      const date = data.timestamp ? data.timestamp.toDate().toLocaleString('fr-FR') : 'Date inconnue';
+      const dateObj = data.timestamp ? data.timestamp.toDate() : new Date();
+      const dateStr = dateObj.toLocaleDateString('fr-FR');
+      const timeStr = dateObj.toLocaleString('fr-FR');
+      
+      // Agrégation
+      datesData[dateStr] = (datesData[dateStr] || 0) + 1;
+      const browser = getBrowserName(data.userAgent);
+      browsersData[browser] = (browsersData[browser] || 0) + 1;
       
       const tr = document.createElement('tr');
       tr.innerHTML = `
-        <td><strong>${date}</strong></td>
+        <td><strong>${timeStr}</strong></td>
         <td>${data.email}</td>
         <td><span class="device-info">${data.userAgent || 'Inconnu'}</span></td>
+        <td>${data.location || 'Inconnue'}<br><span class="device-info">${data.ip || ''}</span></td>
       `;
       tbody.appendChild(tr);
     });
+    
+    renderCharts(datesData, browsersData);
+    
   } catch (err) {
     console.error(err);
-    tbody.innerHTML = '<tr><td colspan="3" class="empty-state" style="color:#ff7b83">Erreur lors du chargement des données. Vous n\'avez peut-être pas les droits administrateur ou les règles Firestore ne sont pas configurées.</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="4" class="empty-state" style="color:#ff7b83">Erreur lors du chargement des données. Vous n\'avez peut-être pas les droits administrateur ou les règles Firestore ne sont pas configurées.</td></tr>';
   }
 }
 
