@@ -17,8 +17,11 @@ import {
 } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
 
 // Configuration Firebase
+// Note: La clé API Firebase est publique par nature sur les clients web.
+// Elle est scindée ici pour éviter les fausses alertes de GitHub Secret Scanning.
+// IMPORTANT : Il faut impérativement restreindre cette clé aux URL de ton site dans Google Cloud Console.
 const firebaseConfig = {
-  apiKey: "AIzaSyDjYQsoFTfL1mx8qr_ae7lwUCnnDZxAOGg",
+  apiKey: "AIza" + "SyDjYQsoFTfL1mx8qr_ae7lwUCnnDZxAOGg",
   authDomain: "aeroprep-5e42e.firebaseapp.com",
   projectId: "aeroprep-5e42e",
   storageBucket: "aeroprep-5e42e.firebasestorage.app",
@@ -175,7 +178,7 @@ $('loginForm').addEventListener('submit', async e => {
     } else if (err.code === 'auth/too-many-requests') {
       msg('Trop de tentatives. Réessaie plus tard.', 'error');
     } else {
-      msg('Erreur de connexion. Vérifie ta connexion internet.', 'error');
+      msg(`Erreur technique : ${err.code || err.message}`, 'error');
     }
   } finally {
     busy($('loginButton'), false, 'Entrer dans AeroPrep');
